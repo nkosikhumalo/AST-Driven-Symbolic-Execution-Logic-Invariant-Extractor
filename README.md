@@ -152,6 +152,46 @@ Root Cause: Boundary condition conflict at operator >= vs > on Line 2.
 
 ---
 
+## Tech Stack
+
+| Layer | Technology | Purpose |
+| --- | --- | --- |
+| Core Language | Go 1.22+ | High concurrency via goroutines, fast execution, single binary distribution |
+| AST Parsing Engine | `smacker/go-tree-sitter` | Multi-language parsing (C++, Java, Go, PHP) into concrete syntax trees |
+| SMT Solver Engine | Z3 SMT Solver (Microsoft) | Mathematical logic verification & counterexample solving via SMT-LIB2 IPC |
+| CLI Framework | `spf13/cobra` | Command-line tool orchestration, command routing, and flag handling |
+| Terminal UI & Diffs | `charmbracelet/lipgloss` | Structured terminal formatting, error styling, and counterexample diff rendering |
+
+---
+
+## Project Structure
+
+```text
+axiom/
+├── cmd/
+│   └── axiom/
+│       └── main.go             # Application entry point & Cobra CLI setup
+├── internal/
+│   ├── ast/
+│   │   ├── parser.go           # Tree-sitter initialization & language grammars
+│   │   └── walker.go           # AST node traversal & syntax abstraction
+│   ├── symbolic/
+│   │   ├── constraint.go       # Branch mapping (if/else/switch path constraints)
+│   │   └── expression.go       # AST-to-symbolic variable representations
+│   ├── solver/
+│   │   ├── smtlib.go           # SMT-LIB2 query builder and logic generator
+│   │   └── z3.go               # Z3 CLI process execution & response parser
+│   └── reporter/
+│       └── reporter.go         # Counterexample formatting & line-by-line diffs
+├── examples/                   # Test code pairs for verification runs
+│   ├── legacy_discount.cpp
+│   └── modern_discount.go
+├── go.mod                      # Go module declaration
+└── go.sum                      # Go dependency checksums
+```
+
+---
+
 ## Roadmap
 
 - [x] SMT-LIB2 pipeline runner for Go
